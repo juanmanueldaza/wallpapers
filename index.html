@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Image Slideshow</title>
+        <style>
+            .slideshow-container {
+                max-width: 100%;
+                height: 100vh;
+                position: relative;
+                margin: auto;
+                overflow: hidden;
+            }
+
+            .slide {
+                display: none;
+                width: 100%;
+                height: 100%;
+            }
+
+            .slide img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+
+            /* Navigation buttons */
+            .prev,
+            .next {
+                cursor: pointer;
+                position: absolute;
+                top: 50%;
+                width: auto;
+                padding: 16px;
+                margin-top: -22px;
+                color: white;
+                font-weight: bold;
+                font-size: 18px;
+                transition: 0.6s ease;
+                border-radius: 0 3px 3px 0;
+                user-select: none;
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+
+            .next {
+                right: 0;
+                border-radius: 3px 0 0 3px;
+            }
+
+            .prev:hover,
+            .next:hover {
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+
+            /* Indicators */
+            .dots-container {
+                position: absolute;
+                bottom: 20px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .dot {
+                cursor: pointer;
+                height: 15px;
+                width: 15px;
+                margin: 0 2px;
+                background-color: #bbb;
+                border-radius: 50%;
+                display: inline-block;
+                transition: background-color 0.6s ease;
+            }
+
+            .active,
+            .dot:hover {
+                background-color: #717171;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="slideshow-container" id="slideshow">
+            <!-- Images will be inserted here by JavaScript -->
+        </div>
+
+        <div class="dots-container" id="dots">
+            <!-- Dots will be inserted here by JavaScript -->
+        </div>
+
+        <script>
+            // Array to store image paths
+            const images = [
+                "daza051.jpg",
+                "daza052.jpg",
+                "daza054.jpg",
+                "daza072.jpg",
+                "daza088.jpg",
+            ];
+
+            let currentSlide = 0;
+            const slideshowContainer = document.getElementById("slideshow");
+            const dotsContainer = document.getElementById("dots");
+
+            // Create slides and dots
+            images.forEach((img, index) => {
+                // Create slide
+                const slide = document.createElement("div");
+                slide.className = "slide";
+                const imgElement = document.createElement("img");
+                imgElement.src = img;
+                slide.appendChild(imgElement);
+                slideshowContainer.appendChild(slide);
+
+                // Create dot
+                const dot = document.createElement("span");
+                dot.className = "dot";
+                dot.onclick = () => showSlide(index);
+                dotsContainer.appendChild(dot);
+            });
+
+            // Add navigation buttons
+            slideshowContainer.innerHTML += `
+        <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+        <a class="next" onclick="changeSlide(1)">&#10095;</a>
+    `;
+
+            function showSlide(n) {
+                const slides = document.getElementsByClassName("slide");
+                const dots = document.getElementsByClassName("dot");
+
+                if (n >= slides.length) currentSlide = 0;
+                if (n < 0) currentSlide = slides.length - 1;
+                else currentSlide = n;
+
+                // Hide all slides
+                for (let i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                    dots[i].className = dots[i].className.replace(
+                        " active",
+                        "",
+                    );
+                }
+
+                // Show current slide
+                slides[currentSlide].style.display = "block";
+                dots[currentSlide].className += " active";
+            }
+
+            function changeSlide(n) {
+                showSlide(currentSlide + n);
+            }
+
+            // Keyboard navigation
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "ArrowLeft") changeSlide(-1);
+                if (e.key === "ArrowRight") changeSlide(1);
+            });
+
+            // Auto-advance slides every 3 seconds
+            setInterval(() => {
+                changeSlide(1);
+            }, 3000);
+
+            // Show first slide initially
+            showSlide(0);
+        </script>
+    </body>
+</html>
