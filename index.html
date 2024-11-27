@@ -64,7 +64,6 @@
             }
 
             .slide {
-                border: 2px solid red;
                 display: none;
                 width: 100%;
                 height: 100%;
@@ -171,17 +170,22 @@
 
             // Add navigation buttons
             slideshowContainer.innerHTML += `
-        <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
-        <a class="next" onclick="changeSlide(1)">&#10095;</a>
-    `;
+              <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+              <a class="next" onclick="changeSlide(1)">&#10095;</a>
+              `;
 
             function showSlide(n) {
                 const slides = document.getElementsByClassName("slide");
                 const dots = document.getElementsByClassName("dot");
 
-                if (n >= slides.length) currentSlide = 0;
-                if (n < 0) currentSlide = slides.length - 1;
-                else currentSlide = n;
+                // Handle wrapping around
+                if (n >= slides.length) {
+                    currentSlide = 0;
+                } else if (n < 0) {
+                    currentSlide = slides.length - 1;
+                } else {
+                    currentSlide = n;
+                }
 
                 // Hide all slides
                 for (let i = 0; i < slides.length; i++) {
