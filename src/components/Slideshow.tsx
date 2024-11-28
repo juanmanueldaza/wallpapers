@@ -4,13 +4,12 @@ import animations from "../styles/animations.module.css";
 import type { SlideImage } from "../types";
 
 const images: SlideImage[] = [
-  { id: "1", url: "/src/assets/pictures/daza051.jpg", alt: "Slide 1" },
-  { id: "2", url: "/src/assets/pictures/daza052.jpg", alt: "Slide 2" },
-  { id: "3", url: "/src/assets/pictures/daza054.jpg", alt: "Slide 3" },
-  { id: "4", url: "/src/assets/pictures/daza072.jpg", alt: "Slide 4" },
-  { id: "5", url: "/src/assets/pictures/daza088.jpg", alt: "Slide 5" },
+  { id: "1", url: "/pictures/daza051.jpg", alt: "Slide 1" },
+  { id: "2", url: "/pictures/daza052.jpg", alt: "Slide 2" },
+  { id: "3", url: "/pictures/daza054.jpg", alt: "Slide 3" },
+  { id: "4", url: "/pictures/daza072.jpg", alt: "Slide 4" },
+  { id: "5", url: "/pictures/daza088.jpg", alt: "Slide 5" },
 ];
-
 const Slideshow: React.FC = () => {
   const { currentSlide, showSlide } = useSlideshow(images);
 
