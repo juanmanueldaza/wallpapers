@@ -27,12 +27,6 @@ images.forEach((img, index) => {
   dotsContainer.appendChild(dot);
 });
 
-// Add navigation buttons
-slideshowContainer.innerHTML += `
-    <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
-    <a class="next" onclick="changeSlide(1)">&#10095;</a>
-`;
-
 function showSlide(n) {
   const slides = document.getElementsByClassName("slide");
   const dots = document.getElementsByClassName("dot");
