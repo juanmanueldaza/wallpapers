@@ -1,0 +1,25 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.fadeIn {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.slideIn {
+    animation: slideIn 0.5s ease-out;
+}
