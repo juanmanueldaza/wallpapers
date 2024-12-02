@@ -3,6 +3,8 @@ import { useSlideshow } from "../hooks/useSlideshow";
 import styles from "../styles/Slideshow.module.css";
 import animations from "../styles/animations.module.css";
 import type { SlideImage } from "../types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark, faDownload } from "@fortawesome/free-solid-svg-icons";
 
 const images: SlideImage[] = [
   { id: "1", url: "/pictures/daza051.jpg", alt: "Slide 1" },
@@ -50,6 +52,16 @@ const Slideshow: React.FC = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isFullscreen, toggleFullscreen]);
 
+  const handleDownload = () => {
+    const currentImage = images[currentSlide];
+    const link = document.createElement("a");
+    link.href = currentImage.url;
+    link.download = `uwJuamManuelDaza-${currentImage.id}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className={styles.mainContainer}>
       <div
@@ -60,6 +72,25 @@ const Slideshow: React.FC = () => {
         onMouseEnter={pauseSlideshow}
         onMouseLeave={resumeSlideshow}
       >
+        {isFullscreen && (
+          <div className={styles.controls}>
+            <button
+              className={styles.closeButton}
+              onClick={toggleFullscreen}
+              aria-label="Exit fullscreen"
+            >
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+            <button
+              className={styles.downloadButton}
+              onClick={handleDownload}
+              aria-label="Download current image"
+            >
+              <FontAwesomeIcon icon={faDownload} />
+            </button>
+          </div>
+        )}
+
         {images.map((img, index) => (
           <div
             key={img.id}
