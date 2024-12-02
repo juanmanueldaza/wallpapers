@@ -1,7 +1,10 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import type { SlideImage } from "../types";
 
-export const useSlideshow = (images: SlideImage[]) => {
+export const useSlideshow = (
+  images: SlideImage[],
+  containerRef: React.RefObject<HTMLDivElement>,
+) => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [scale, setScale] = useState<number>(1);
@@ -59,8 +62,39 @@ export const useSlideshow = (images: SlideImage[]) => {
   );
 
   const toggleFullscreen = useCallback(() => {
-    setIsFullscreen((prev) => !prev);
-    setScale(1); // Reset scale when toggling fullscreen
+    if (!document.fullscreenElement && containerRef.current) {
+      containerRef.current
+        .requestFullscreen()
+        .then(() => {
+          setIsFullscreen(true);
+        })
+        .catch((err) => {
+          console.error(
+            `Error attempting to enable fullscreen: ${err.message}`,
+          );
+        });
+    } else if (document.fullscreenElement) {
+      document
+        .exitFullscreen()
+        .then(() => {
+          setIsFullscreen(false);
+        })
+        .catch((err) => {
+          console.error(`Error attempting to exit fullscreen: ${err.message}`);
+        });
+    }
+    setScale(1);
+  }, [containerRef]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
   }, []);
 
   useEffect(() => {

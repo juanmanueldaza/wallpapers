@@ -15,15 +15,24 @@
     transition: all 0.3s ease;
 }
 
-.fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.95);
-    z-index: 1000;
+.slideshowContainer:fullscreen {
     padding: 0;
+    background: #000;
+}
+
+.slideshowContainer:-webkit-full-screen {
+    padding: 0;
+    background: #000;
+}
+
+.slideshowContainer:-moz-full-screen {
+    padding: 0;
+    background: #000;
+}
+
+.slideshowContainer:-ms-fullscreen {
+    padding: 0;
+    background: #000;
 }
 
 .slide {

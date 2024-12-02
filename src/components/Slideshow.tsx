@@ -16,6 +16,7 @@ const images: SlideImage[] = [
 ];
 
 const Slideshow: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const {
     currentSlide,
     showSlide,
@@ -25,9 +26,20 @@ const Slideshow: React.FC = () => {
     handleWheel,
     isFullscreen,
     toggleFullscreen,
-  } = useSlideshow(images);
+  } = useSlideshow(images, containerRef);
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const elem = document.documentElement;
+    if (
+      !elem.requestFullscreen &&
+      !elem.mozRequestFullScreen && // Firefox
+      !elem.webkitRequestFullscreen && // Chrome, Safari & Opera
+      !elem.msRequestFullscreen
+    ) {
+      // IE/Edge
+      console.warn("Fullscreen API is not supported in this browser");
+    }
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
