@@ -9,12 +9,14 @@ const images: SlideImage[] = [
   { id: "3", url: "/pictures/daza054.jpg", alt: "Slide 3" },
   { id: "4", url: "/pictures/daza072.jpg", alt: "Slide 4" },
   { id: "5", url: "/pictures/daza088.jpg", alt: "Slide 5" },
+  { id: "5", url: "/pictures/daza478.jpg", alt: "Slide 5" },
 ];
+
 const Slideshow: React.FC = () => {
   const { currentSlide, showSlide } = useSlideshow(images);
 
   return (
-    <>
+    <div className={styles.mainContainer}>
       <div className={styles.slideshowContainer}>
         {images.map((img, index) => (
           <div
@@ -27,19 +29,28 @@ const Slideshow: React.FC = () => {
         ))}
       </div>
 
-      <div className={styles.dotsContainer}>
-        {images.map((_, index) => (
-          <span
-            key={index}
-            className={`${styles.dot} ${index === currentSlide ? styles.active : ""}`}
+      <div className={styles.thumbnailContainer}>
+        {images.map((img, index) => (
+          <img
+            key={img.id}
+            src={img.url}
+            alt={`Thumbnail ${index + 1}`}
+            className={`${styles.thumbnail} ${
+              index === currentSlide ? styles.activeThumbnail : ""
+            }`}
             onClick={() => showSlide(index)}
-            role="button"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                showSlide(index);
+              }
+            }}
             tabIndex={0}
+            role="button"
             aria-label={`Show slide ${index + 1}`}
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
