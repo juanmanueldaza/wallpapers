@@ -17,12 +17,30 @@
 .slide {
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.slide img {
+.imageWrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-origin: center;
+    transition: transform 0.2s ease-out;
+    width: 100%;
+    height: 100%;
+}
+
+.mainImage {
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+.slideshowContainer:hover .imageWrapper {
+    transform: scale(1.05);
 }
 
 .thumbnailContainer {
@@ -64,43 +82,5 @@
     .thumbnail {
         width: 60px;
         height: 40px;
-    }
-}
-
-.dotsContainer {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    text-align: center;
-    z-index: 1;
-}
-
-.dot {
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6s ease;
-}
-
-.active {
-    background-color: #717171;
-}
-
-.dot:hover {
-    background-color: #717171;
-}
-
-@media (max-width: 768px) {
-    .dot {
-        height: 12px;
-        width: 12px;
-    }
-
-    .dotsContainer {
-        bottom: 15px;
     }
 }
