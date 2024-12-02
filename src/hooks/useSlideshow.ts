@@ -48,10 +48,10 @@ export const useSlideshow = (images: SlideImage[]) => {
     (event: WheelEvent) => {
       if (isPaused) {
         event.preventDefault();
-        const delta = event.deltaY * -0.001; // More subtle scaling
+        const delta = event.deltaY * -0.002;
         setScale((prevScale) => {
           const newScale = prevScale + delta;
-          return Math.min(Math.max(newScale, 1.05), 1.5); // Limit between hover scale and max scale
+          return Math.min(Math.max(newScale, baseScale), maxScale); // Using maxScale here
         });
       }
     },
