@@ -5,6 +5,7 @@ import animations from "../styles/animations.module.css";
 import type { SlideImage } from "../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 const images: SlideImage[] = [
   { id: "1", url: "/pictures/daza051.jpg", alt: "Slide 1" },
@@ -76,6 +77,17 @@ const Slideshow: React.FC = () => {
 
   return (
     <div className={styles.mainContainer}>
+      {!isFullscreen && (
+        <a
+          href="https://github.com/juanmanueldaza/wallpapers"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button className={styles.githubButton}>
+            <FontAwesomeIcon icon={faGithub} />
+          </button>
+        </a>
+      )}
       <div
         ref={containerRef}
         className={`${styles.slideshowContainer} ${

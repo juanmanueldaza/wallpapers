@@ -173,3 +173,44 @@
         font-size: 1rem;
     }
 }
+.githubButton {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 1002; /* Ensure it's above other fixed elements */
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    color: white;
+}
+
+.githubButton:hover {
+    opacity: 1;
+}
+
+.githubButton svg {
+    /* Style the SVG icon directly */
+    width: 30px; /* Adjust size as needed */
+    height: 30px;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .githubButton {
+        top: 10px;
+        right: 10px;
+    }
+    .githubButton svg {
+        width: 25px;
+        height: 25px;
+    }
+}
+.githubLink {
+    position: fixed;
+    top: 20px;
+    right: 20px; /* Adjust positioning as needed */
+    z-index: 1002; /* Ensure it's above other fixed elements */
+}
