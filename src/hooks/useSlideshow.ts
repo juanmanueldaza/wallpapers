@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { SlideImage } from "../types";
 
 export const useSlideshow = (
@@ -9,7 +9,6 @@ export const useSlideshow = (
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [scale, setScale] = useState<number>(1);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
-  const intervalRef = useRef<number | null>(null);
   const baseScale = 1.05;
   const maxScale = 2;
 
@@ -61,6 +60,73 @@ export const useSlideshow = (
     [isPaused],
   );
 
+  const handleTouchStart = useCallback(
+    (e: TouchEvent) => {
+      if (isPaused) return;
+      const touch = e.touches[0];
+      const startX = touch.clientX;
+      const startY = touch.clientY;
+
+      // Store start coordinates
+      containerRef.current!.dataset.touchStartX = startX.toString();
+      containerRef.current!.dataset.touchStartY = startY.toString();
+    },
+    [isPaused, containerRef],
+  );
+
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      if (isPaused) return;
+      e.preventDefault(); // Prevent scrolling
+      const touch = e.touches[0];
+      const currentX = touch.clientX;
+      const currentY = touch.clientY;
+      const startX = parseInt(
+        containerRef.current!.dataset.touchStartX || "0",
+        10,
+      );
+      const startY = parseInt(
+        containerRef.current!.dataset.touchStartY || "0",
+        10,
+      );
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
+
+      // Check for horizontal swipe
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+        // 50 is a threshold for swipe sensitivity
+        if (diffX > 0) {
+          changeSlide(-1);
+        } else {
+          changeSlide(1);
+        }
+        containerRef.current!.dataset.touchStartX = "0"; // Reset for next swipe
+        containerRef.current!.dataset.touchStartY = "0";
+      }
+    },
+    [isPaused, changeSlide, containerRef],
+  );
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("wheel", handleWheel, { passive: false });
+      container.addEventListener("touchstart", handleTouchStart, {
+        passive: false,
+      });
+      container.addEventListener("touchmove", handleTouchMove, {
+        passive: false,
+      });
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener("wheel", handleWheel);
+        container.removeEventListener("touchstart", handleTouchStart);
+        container.removeEventListener("touchmove", handleTouchMove);
+      }
+    };
+  }, [handleWheel, handleTouchStart, handleTouchMove, containerRef]);
+
   const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement && containerRef.current) {
       containerRef.current
@@ -105,17 +171,8 @@ export const useSlideshow = (
 
     document.addEventListener("keydown", handleKeyDown);
 
-    if (!isPaused) {
-      intervalRef.current = window.setInterval(() => {
-        changeSlide(1);
-      }, 3000);
-    }
-
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
     };
   }, [changeSlide, isPaused]);
 

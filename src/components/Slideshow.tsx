@@ -7,14 +7,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
-const images: SlideImage[] = [
-  { id: "1", url: "/pictures/daza051.jpg", alt: "Slide 1" },
-  { id: "2", url: "/pictures/daza052.jpg", alt: "Slide 2" },
-  { id: "3", url: "/pictures/daza054.jpg", alt: "Slide 3" },
-  { id: "4", url: "/pictures/daza072.jpg", alt: "Slide 4" },
-  { id: "5", url: "/pictures/daza088.jpg", alt: "Slide 5" },
-  { id: "6", url: "/pictures/daza478.jpg", alt: "Slide 6" },
-];
+const createImage = (id: string): SlideImage => ({
+  id: id,
+  url: `/pictures/daza${id}-medium.webp`,
+  urlthumbnail: `/pictures/daza${id}-small.webp`,
+  urldownload: `/pictures/daza${id}.jpg`,
+  alt: `Slide ${id}`,
+});
+
+const imageIds = ["051", "052", "054", "072", "088", "478"];
+
+const images: SlideImage[] = imageIds.map(createImage);
 
 const Slideshow: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -68,7 +71,7 @@ const Slideshow: React.FC = () => {
   const handleDownload = () => {
     const currentImage = images[currentSlide];
     const link = document.createElement("a");
-    link.href = currentImage.url;
+    link.href = currentImage.urldownload;
     link.download = `uwJuamManuelDaza-${currentImage.id}.jpg`;
     document.body.appendChild(link);
     link.click();
@@ -141,7 +144,7 @@ const Slideshow: React.FC = () => {
           {images.map((img, index) => (
             <img
               key={img.id}
-              src={img.url}
+              src={img.urlthumbnail}
               alt={`Thumbnail ${index + 1}`}
               className={`${styles.thumbnail} ${
                 index === currentSlide ? styles.activeThumbnail : ""

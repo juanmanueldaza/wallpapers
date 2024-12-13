@@ -8,7 +8,6 @@
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "module": "ESNext",
-    "allowImportingTsExtensions": true,
     "outDir": "./dist"
   },
   "include": ["vite.config.ts"]
