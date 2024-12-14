@@ -1,9 +1,9 @@
 #!/bin/bash
 
-for file in dist/pictures/*.jpg; do
-    base="${file##dist/pictures/}"  #Extract filename, removing path prefix
-    convert "$file" -resize "640x>" "dist/assets/pictures/${base}-small.webp"
-    convert "$file" -resize "1024x>" "dist/assets/pictures/${base}-medium.webp"
-    convert "$file" -resize "1920x>" "dist/assets/pictures/${base}-large.webp"
-    cp "$file" "dist/pictures/${base}-xlarge.jpg"
+find dist/pictures -name "*.jpg" -print0 | while IFS= read -r -d $'\0' file; do
+    base="${file##dist/pictures/}"
+    convert "$file" -resize 640x "${base}-small.webp"
+    convert "$file" -resize 1024x "${base}-medium.webp"
+    convert "$file" -resize 1920x "${base}-large.webp"
+    cp "$file" "${base}-xlarge.jpg"
 done
