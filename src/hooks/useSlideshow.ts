@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import type { SlideImage } from "../types";
 
 export const useSlideshow = (
@@ -11,7 +11,7 @@ export const useSlideshow = (
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const baseScale = 1.05;
   const maxScale = 2;
-
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null); //Store touch coordinates in a ref
   const showSlide = useCallback(
     (n: number): void => {
       let slideNumber: number;
@@ -64,48 +64,34 @@ export const useSlideshow = (
     (e: TouchEvent) => {
       if (isPaused) return;
       const touch = e.touches[0];
-      const startX = touch.clientX;
-      const startY = touch.clientY;
-
-      // Store start coordinates
-      containerRef.current!.dataset.touchStartX = startX.toString();
-      containerRef.current!.dataset.touchStartY = startY.toString();
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
     },
-    [isPaused, containerRef],
+    [isPaused],
   );
 
   const handleTouchMove = useCallback(
     (e: TouchEvent) => {
-      if (isPaused) return;
+      if (isPaused || !touchStartRef.current) return;
       e.preventDefault(); // Prevent scrolling
       const touch = e.touches[0];
-      const currentX = touch.clientX;
-      const currentY = touch.clientY;
-      const startX = parseInt(
-        containerRef.current!.dataset.touchStartX || "0",
-        10,
-      );
-      const startY = parseInt(
-        containerRef.current!.dataset.touchStartY || "0",
-        10,
-      );
-      const diffX = currentX - startX;
-      const diffY = currentY - startY;
+      const diffX = touch.clientX - touchStartRef.current.x;
+      const diffY = touch.clientY - touchStartRef.current.y;
 
-      // Check for horizontal swipe
+      //Check for horizontal swipe
       if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-        // 50 is a threshold for swipe sensitivity
         if (diffX > 0) {
           changeSlide(-1);
         } else {
           changeSlide(1);
         }
-        containerRef.current!.dataset.touchStartX = "0"; // Reset for next swipe
-        containerRef.current!.dataset.touchStartY = "0";
       }
     },
-    [isPaused, changeSlide, containerRef],
+    [isPaused, changeSlide],
   );
+
+  const handleTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -117,15 +103,25 @@ export const useSlideshow = (
       container.addEventListener("touchmove", handleTouchMove, {
         passive: false,
       });
+      container.addEventListener("touchend", handleTouchEnd, {
+        passive: false,
+      });
     }
     return () => {
       if (container) {
         container.removeEventListener("wheel", handleWheel);
         container.removeEventListener("touchstart", handleTouchStart);
         container.removeEventListener("touchmove", handleTouchMove);
+        container.removeEventListener("touchend", handleTouchEnd);
       }
     };
-  }, [handleWheel, handleTouchStart, handleTouchMove, containerRef]);
+  }, [
+    handleWheel,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+    containerRef,
+  ]);
 
   const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement && containerRef.current) {
