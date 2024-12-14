@@ -76,10 +76,15 @@
     opacity: 0;
     transition: opacity 0.3s ease;
     border-radius: 20px;
+    /* Add these properties for the glow effect */
 }
 
 .mainImage.loaded {
     opacity: 1;
+}
+
+.fullscreen .mainImage {
+    border-radius: 8px; /* Smaller border radius in fullscreen */
 }
 
 .thumbnailContainer {
