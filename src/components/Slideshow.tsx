@@ -150,6 +150,7 @@ const Slideshow: React.FC = () => {
               className={styles.imageWrapper}
               style={{
                 transform: `scale(${scale})`,
+                cursor: isFullscreen ? "zoom-in" : "pointer", // Modify cursor based on fullscreen state
               }}
               onClick={toggleFullscreen}
             >

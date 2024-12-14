@@ -52,11 +52,15 @@
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     width: 100%;
     height: 100%;
-    cursor: zoom-in;
+    cursor: pointer; /* Default cursor */
 }
 
 .fullscreen .imageWrapper {
-    cursor: zoom-out;
+    cursor: zoom-in; /* Only show zoom cursor in fullscreen */
+}
+
+.fullscreen .imageWrapper[style*="scale"] {
+    cursor: zoom-out; /* Show zoom-out cursor when zoomed in fullscreen */
 }
 
 .loading {
@@ -71,6 +75,7 @@
 .mainImage {
     opacity: 0;
     transition: opacity 0.3s ease;
+    border-radius: 20px;
 }
 
 .mainImage.loaded {

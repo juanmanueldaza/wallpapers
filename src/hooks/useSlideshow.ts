@@ -36,7 +36,7 @@ export const useSlideshow = (
 
   const pauseSlideshow = useCallback(() => {
     setIsPaused(true);
-    if (!isFullscreen) {
+    if (isFullscreen) {
       setScale(baseScale);
     }
   }, [isFullscreen]);
@@ -48,16 +48,17 @@ export const useSlideshow = (
 
   const handleWheel = useCallback(
     (event: WheelEvent) => {
-      if (isPaused) {
+      if (isPaused && isFullscreen) {
+        // Add isFullscreen check here
         event.preventDefault();
         const delta = event.deltaY * -0.002;
         setScale((prevScale) => {
           const newScale = prevScale + delta;
-          return Math.min(Math.max(newScale, baseScale), maxScale); // Using maxScale here
+          return Math.min(Math.max(newScale, baseScale), maxScale);
         });
       }
     },
-    [isPaused],
+    [isPaused, isFullscreen], // Add isFullscreen to dependencies
   );
 
   const handleTouchStart = useCallback(
