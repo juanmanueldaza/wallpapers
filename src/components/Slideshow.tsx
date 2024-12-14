@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react"; // Add useState to imports
+import { preloadImages } from "../utils/imagePreloader";
 import { useSlideshow } from "../hooks/useSlideshow";
 import styles from "../styles/Slideshow.module.css";
 import animations from "../styles/animations.module.css";
@@ -6,21 +7,25 @@ import type { SlideImage } from "../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { getImagePath } from "../config/images";
 
 const createImage = (id: string): SlideImage => ({
   id: id,
-  url: `/pictures/daza${id}-medium.webp`,
-  urlthumbnail: `/pictures/daza${id}-small.webp`,
-  urldownload: `/pictures/daza${id}.jpg`,
+  url: getImagePath(`daza${id}-medium.webp`),
+  urlthumbnail: getImagePath(`daza${id}-small.webp`),
+  urldownload: getImagePath(`daza${id}.jpg`),
   alt: `Slide ${id}`,
 });
 
 const imageIds = ["051", "052", "054", "072", "088", "478"];
-
 const images: SlideImage[] = imageIds.map(createImage);
 
 const Slideshow: React.FC = () => {
+  // Move all hooks to the top level of the component
+  const [isLoading, setIsLoading] = useState(true);
+  const [imageLoadError, setImageLoadError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
   const {
     currentSlide,
     showSlide,
@@ -32,15 +37,26 @@ const Slideshow: React.FC = () => {
     toggleFullscreen,
   } = useSlideshow(images, containerRef);
 
+  const handleImageError = (id: string) => {
+    setImageLoadError(`Failed to load image ${id}`);
+  };
+
+  useEffect(() => {
+    const allImageUrls = images.flatMap((img) => [img.url, img.urlthumbnail]);
+
+    preloadImages(allImageUrls)
+      .then(() => setIsLoading(false))
+      .catch((error) => console.error("Error preloading images:", error));
+  }, []);
+
   useEffect(() => {
     const elem = document.documentElement;
     if (
       !elem.requestFullscreen &&
-      !elem.mozRequestFullScreen && // Firefox
-      !elem.webkitRequestFullscreen && // Chrome, Safari & Opera
+      !elem.mozRequestFullScreen &&
+      !elem.webkitRequestFullscreen &&
       !elem.msRequestFullscreen
     ) {
-      // IE/Edge
       console.warn("Fullscreen API is not supported in this browser");
     }
   }, []);
@@ -77,6 +93,10 @@ const Slideshow: React.FC = () => {
     link.click();
     document.body.removeChild(link);
   };
+
+  if (isLoading) {
+    return <div className={styles.loading}>Loading images...</div>;
+  }
 
   return (
     <div className={styles.mainContainer}>
@@ -133,7 +153,17 @@ const Slideshow: React.FC = () => {
               }}
               onClick={toggleFullscreen}
             >
-              <img src={img.url} alt={img.alt} className={styles.mainImage} />
+              <img
+                src={img.url}
+                alt={img.alt}
+                className={styles.mainImage}
+                onError={() => handleImageError(img.id)}
+                onLoad={(e) => e.currentTarget.classList.add(styles.loaded)}
+              />
+
+              {imageLoadError && (
+                <div className={styles.error}>{imageLoadError}</div>
+              )}
             </div>
           </div>
         ))}

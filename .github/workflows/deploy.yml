@@ -35,7 +35,7 @@ jobs:
       - name: Run Image Processing Script
         run: |
           chmod +x ./picture_processing.sh
-          ./picture_processing.sh # Now runs AFTER the build
+          ./picture_processing.sh
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

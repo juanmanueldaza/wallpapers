@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Process each image individually (most robust)
-find dist/pictures -name "*.jpg" -print0 | while IFS= read -r -d $'\0' file; do
-    base="${file##dist/pictures/}"
+find public/pictures -name "*.jpg" -print0 | while IFS= read -r -d $'\0' file; do
+    base="${file##public/pictures/}"
     #Error Handling
     if convert "$file" -resize 640x "${file%.*}-small.webp"; then
         echo "Conversion to small WebP successful: $file"
@@ -14,5 +14,4 @@ find dist/pictures -name "*.jpg" -print0 | while IFS= read -r -d $'\0' file; do
     else
         echo "Error converting to medium WebP: $file" >&2
     fi
-    #No need to cp the file again, as that's already in dist
 done
