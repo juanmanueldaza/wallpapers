@@ -168,6 +168,18 @@
 }
 
 @media (max-width: 768px) {
+    .mainImage {
+        width: 100%;
+    }
+    .githubButton {
+        top: 10px;
+        right: 10px;
+    }
+    .githubButton svg {
+        width: 25px;
+        height: 25px;
+    }
+
     .thumbnailContainer {
         gap: 5px;
         padding: 10px;
@@ -219,17 +231,6 @@
     height: 30px;
 }
 
-/* Media query for smaller screens */
-@media (max-width: 768px) {
-    .githubButton {
-        top: 10px;
-        right: 10px;
-    }
-    .githubButton svg {
-        width: 25px;
-        height: 25px;
-    }
-}
 .githubLink {
     position: fixed;
     top: 20px;
