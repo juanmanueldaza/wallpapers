@@ -1,0 +1,65 @@
+.button {
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  padding: 0;
+  color: white;
+}
+
+.button:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.close,
+.download {
+  width: 40px;
+  height: 40px;
+}
+
+.github {
+  background: none;
+}
+
+.github svg {
+  width: 30px;
+  height: 30px;
+}
+
+.link {
+  text-decoration: none;
+  position: fixed; /* Add this */
+  top: 20px; /* Add this */
+  right: 20px; /* Add this */
+  z-index: 1002; /* Add this */
+}
+
+@media (max-width: 768px) {
+  .button {
+    width: 35px;
+    height: 35px;
+  }
+
+  .github svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .link {
+    top: 10px;
+    right: 10px;
+  }
+}
