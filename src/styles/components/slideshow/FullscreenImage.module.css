@@ -1,0 +1,33 @@
+.imageWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  overscroll-behavior: none;
+}
+
+.mainImage {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 20px;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.mainImage.loaded {
+  opacity: 1;
+}
+
+.fullscreen .mainImage {
+  border-radius: 8px;
+}

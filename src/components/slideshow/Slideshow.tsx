@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { preloadImages } from "../../utils/imagePreloader";
 import { useSlideshow } from "../../hooks/useSlideshow";
-import styles from "../../styles/Slideshow.module.css";
+import styles from "@styles/Slideshow.module.css";
 import type { SlideImage } from "../../types";
 import { getImagePath } from "../../config/images";
 import { Controls } from "./Controls";

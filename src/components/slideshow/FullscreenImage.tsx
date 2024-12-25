@@ -1,5 +1,5 @@
-import styles from "../../styles/Slideshow.module.css";
-import animations from "../../styles/animations.module.css";
+import styles from "@styles/Slideshow.module.css";
+import animations from "@styles/animations.module.css";
 import type { SlideImage } from "../../types";
 
 interface FullscreenImageProps {

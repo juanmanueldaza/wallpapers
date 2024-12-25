@@ -1,5 +1,5 @@
 import { faXmark, faDownload } from "@fortawesome/free-solid-svg-icons";
-import styles from "../../styles/Slideshow.module.css";
+import styles from "@styles/Slideshow.module.css";
 import { Button } from "../common/Button";
 
 interface ControlsProps {

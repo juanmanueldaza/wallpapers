@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import type { SlideImage } from "../types";
+import type { SlideImage } from "@types";
 
 export const useSlideshow = (
   images: SlideImage[],
