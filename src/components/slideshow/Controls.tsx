@@ -1,6 +1,6 @@
 import { faXmark, faDownload } from "@fortawesome/free-solid-svg-icons";
 import styles from "@styles/Slideshow.module.css";
-import { Button } from "../common/Button";
+import { Button } from "@components/common/Button";
 
 interface ControlsProps {
   onClose: () => void;

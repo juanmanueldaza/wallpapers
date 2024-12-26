@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { preloadImages } from "../../utils/imagePreloader";
-import { useSlideshow } from "../../hooks/useSlideshow";
+import { preloadImages } from "@utils/imagePreloader";
+import { useSlideshow } from "@hooks/useSlideshow";
 import styles from "@styles/Slideshow.module.css";
-import type { SlideImage } from "../../types";
-import { getImagePath } from "../../config/images";
-import { Controls } from "./Controls";
-import { FullscreenImage } from "./FullscreenImage";
-import { GithubButton } from "./GithubButton";
-import { Loading } from "./Loading";
-import { Thumbnails } from "./Thumbnails";
+import type { SlideImage } from "@types";
+import { getImagePath } from "@config/images";
+import { Controls } from "@components/slideshow/Controls";
+import { FullscreenImage } from "@components/slideshow/FullscreenImage";
+import { GithubButton } from "@components/slideshow/GithubButton";
+import { Loading } from "@components/slideshow/Loading";
+import { Thumbnails } from "@components/slideshow/Thumbnails";
 
 const createImage = (id: string): SlideImage => ({
   id: id,

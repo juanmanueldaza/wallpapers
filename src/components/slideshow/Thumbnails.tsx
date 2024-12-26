@@ -1,5 +1,5 @@
 import styles from "@styles/Slideshow.module.css";
-import type { SlideImage } from "../../types";
+import type { SlideImage } from "@types";
 
 interface ThumbnailsProps {
   images: SlideImage[];

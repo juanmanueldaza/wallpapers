@@ -7,11 +7,12 @@ export default defineConfig({
   base: "/",
   resolve: {
     alias: {
-      "@types": path.resolve(__dirname, "./src/types"), // Alias @src to the src directory
-      "@components": path.resolve(__dirname, "./src/components"), // Alias @components to src/components
-      "@utils": path.resolve(__dirname, "./src/utils"), // Alias @utils to src/utils
-      "@styles": path.resolve(__dirname, "./src/styles"), //Alias @styles to src/styles
-      "@config": path.resolve(__dirname, "./src/config"), //Alias @config to src/config
+      "@types": path.resolve(__dirname, "src/types"),
+      "@components": path.resolve(__dirname, "src/components"),
+      "@hooks": path.resolve(__dirname, "src/hooks"),
+      "@utils": path.resolve(__dirname, "src/utils"),
+      "@styles": path.resolve(__dirname, "src/styles"),
+      "@config": path.resolve(__dirname, "src/config"),
     },
   },
   build: {

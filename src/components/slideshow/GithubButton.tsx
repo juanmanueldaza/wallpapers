@@ -1,5 +1,5 @@
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { Button } from "../common/Button";
+import { Button } from "@components/common/Button";
 
 export const GithubButton: React.FC = () => (
   <Button
