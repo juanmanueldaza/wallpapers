@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import cssnano from "cssnano";
 
 export default defineConfig({
   plugins: [react()],
@@ -43,16 +44,12 @@ export default defineConfig({
             "./src/components/slideshow/Thumbnails.tsx",
           ],
         },
-
-        // Asset naming strategy
         entryFileNames: "assets/[name].[hash].js",
         chunkFileNames: "assets/[name].[hash].js",
         assetFileNames: ({ name }) => {
-          // Keep images in separate directory
           if (/\.(gif|jpe?g|png|svg|webp)$/.test(name ?? "")) {
             return "assets/images/[name].[hash][extname]";
           }
-          // Keep CSS in separate directory
           if (/\.css$/.test(name ?? "")) {
             return "assets/css/[name].[hash][extname]";
           }
@@ -84,7 +81,7 @@ export default defineConfig({
     postcss: {
       plugins: [
         process.env.NODE_ENV === "production"
-          ? require("cssnano")({ preset: "default" })
+          ? cssnano({ preset: "default" })
           : null,
       ].filter(Boolean),
     },
