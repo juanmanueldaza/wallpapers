@@ -1,7 +1,12 @@
-import Slideshow from "./components/slideshow/Slideshow";
+import { lazy, Suspense } from "react";
+const Slideshow = lazy(() => import("./components/slideshow/Slideshow"));
 
-const App: React.FC = () => {
-  return <Slideshow />;
+const App = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Slideshow />
+    </Suspense>
+  );
 };
 
 export default App;
