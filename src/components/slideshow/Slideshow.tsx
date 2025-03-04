@@ -18,7 +18,30 @@ const createImage = (id: string): SlideImage => ({
   alt: `Slide ${id}`,
 });
 
-const imageIds = ["051", "052", "054", "072", "088", "478"];
+const imageIds = [
+  "007",
+  "009",
+  "024",
+  "036",
+  "047",
+  "051",
+  "052",
+  "054",
+  "060",
+  "061",
+  "063",
+  "063",
+  "067",
+  "072",
+  "088",
+  "128",
+  "131",
+  "136",
+  "140",
+  "143",
+  "474",
+  "478",
+];
 const images: SlideImage[] = imageIds.map(createImage);
 
 const Slideshow: React.FC = () => {
