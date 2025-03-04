@@ -15,13 +15,21 @@ find "$PICTURES_DIR" -name "*.jpg" -print0 | while IFS= read -r -d $'\0' file; d
     base="${file##*/}"
     dir="${file%/*}"
 
-    #Error Handling
+    # Rotate the image based on its EXIF orientation data
+    if convert "$file" -auto-orient "$file"; then
+        echo "Auto-orient successful: $file"
+    else
+        echo "Error auto-orienting: $file" >&2
+    fi
+
+    # Resize and convert to small WebP
     if convert "$file" -resize 640x "${dir}/${base%.*}-small.webp"; then
         echo "Conversion to small WebP successful: $file"
     else
         echo "Error converting to small WebP: $file" >&2
     fi
 
+    # Resize and convert to medium WebP
     if convert "$file" -resize 1024x "${dir}/${base%.*}-medium.webp"; then
         echo "Conversion to medium WebP successful: $file"
     else
