@@ -3,45 +3,42 @@ import { preloadImages } from "@utils/imagePreloader";
 import { useSlideshow } from "@hooks/useSlideshow";
 import styles from "@styles/Slideshow.module.css";
 import type { SlideImage } from "@types";
-import { getImagePath } from "@config/images";
 import { Controls } from "@components/slideshow/Controls";
 import { FullscreenImage } from "@components/slideshow/FullscreenImage";
 import { GithubButton } from "@components/slideshow/GithubButton";
 import { Loading } from "@components/slideshow/Loading";
 import { Thumbnails } from "@components/slideshow/Thumbnails";
 
-const createImage = (id: string): SlideImage => ({
-  id: id,
-  url: getImagePath(`daza${id}-medium.webp`),
-  urlthumbnail: getImagePath(`daza${id}-small.webp`),
-  urldownload: getImagePath(`daza${id}.jpg`),
-  alt: `Slide ${id}`,
+// Use Vite's glob import to get all images
+const imageFiles = import.meta.glob("/public/pictures/*.{jpg,webp}", {
+  eager: true,
+  as: "url",
 });
 
-const imageIds = [
-  "007",
-  "009",
-  "024",
-  "036",
-  "047",
-  "051",
-  "052",
-  "054",
-  "060",
-  "061",
-  "063",
-  "067",
-  "072",
-  "088",
-  "128",
-  "131",
-  "136",
-  "140",
-  "143",
-  "474",
-  "478",
-];
-const images: SlideImage[] = imageIds.map(createImage);
+// Function to extract ID from filename
+const getImageId = (filename: string) => {
+  const match = filename.match(/daza(\d+)/);
+  return match ? match[1] : null;
+};
+
+// Create images array from glob results
+const images: SlideImage[] = Object.entries(imageFiles)
+  .reduce((acc: SlideImage[], [path, url]) => {
+    const id = getImageId(path);
+    if (id && path.includes("-medium.webp")) {
+      acc.push({
+        id,
+        url: url as string,
+        urlthumbnail: imageFiles[
+          `/public/pictures/daza${id}-small.webp`
+        ] as string,
+        urldownload: imageFiles[`/public/pictures/daza${id}.jpg`] as string,
+        alt: `Slide ${id}`,
+      });
+    }
+    return acc;
+  }, [])
+  .sort((a, b) => a.id.localeCompare(b.id));
 
 const Slideshow: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
