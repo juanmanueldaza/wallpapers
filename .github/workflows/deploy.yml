@@ -29,14 +29,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y imagemagick
 
-      - name: Build
-        run: npm run build # Vite build happens FIRST
-
-      # Process images and copy them to dist
+      # Process images BEFORE build
       - name: Run Image Processing Script
         run: |
           chmod +x ./picture_processing.sh
           NODE_ENV=production ./picture_processing.sh
+
+      - name: Build
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

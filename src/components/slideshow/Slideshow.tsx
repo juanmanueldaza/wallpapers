@@ -18,6 +18,14 @@ const getImageId = (filename: string) => {
   return match ? match[1] : null;
 };
 
+// Function to get correct path for images
+const getImagePath = (filename: string) => {
+  // In development, use the public path
+  // In production, use the base URL path
+  const basePath = import.meta.env.DEV ? "/pictures" : "/wallpapers/pictures";
+  return `${basePath}/${filename}`;
+};
+
 // Create images array from glob results
 const images: SlideImage[] = Object.entries(imageFiles)
   .reduce((acc: SlideImage[], [path, url]) => {
@@ -25,11 +33,9 @@ const images: SlideImage[] = Object.entries(imageFiles)
     if (id && path.includes("-medium.webp")) {
       acc.push({
         id,
-        url: url as string,
-        urlthumbnail: imageFiles[
-          `/public/pictures/daza${id}-small.webp`
-        ] as string,
-        urldownload: imageFiles[`/public/pictures/daza${id}.jpg`] as string,
+        url: getImagePath(`daza${id}-medium.webp`),
+        urlthumbnail: getImagePath(`daza${id}-small.webp`),
+        urldownload: getImagePath(`daza${id}.jpg`),
         alt: `Slide ${id}`,
       });
     }
