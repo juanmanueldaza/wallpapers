@@ -1,6 +1,5 @@
 import { faXmark, faDownload } from "@fortawesome/free-solid-svg-icons";
 import styles from "@styles/NavBar.module.css";
-import buttonStyles from "@styles/Button.module.css";
 import { Button } from "@components/common/Button";
 
 interface ControlsProps {

@@ -3,7 +3,6 @@ import { preloadImages } from "@utils/imagePreloader";
 import styles from "@styles/Slideshow.module.css";
 import type { SlideImage } from "@types";
 import { Controls } from "@components/slideshow/Controls";
-import { GithubButton } from "@components/slideshow/GithubButton";
 import { NavBar } from "@components/common/NavBar";
 import { Loading } from "@components/slideshow/Loading";
 
