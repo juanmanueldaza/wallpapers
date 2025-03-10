@@ -7,10 +7,12 @@ import { NavBar } from "@components/common/NavBar";
 import { Loading } from "@components/slideshow/Loading";
 
 // Use Vite's glob import to get all images
-const imageFiles = import.meta.glob("/public/pictures/*.{jpg,webp}", {
-  eager: true,
-  as: "url",
-});
+const imageFiles = Object.values(
+  import.meta.glob("/public/pictures/*.{jpg,webp}", {
+    eager: true,
+    as: "url",
+  }),
+);
 
 // Function to extract ID from filename
 const getImageId = (filename: string) => {
@@ -18,35 +20,28 @@ const getImageId = (filename: string) => {
   return match ? match[1] : null;
 };
 
+// Function to find URL by pattern
+const findImageUrl = (id: string, pattern: string): string => {
+  const filename = `daza${id}${pattern}`;
+  return imageFiles.find((url) => url.includes(filename)) || "";
+};
+
 // Create images array from glob results
-const images: SlideImage[] = Object.entries(imageFiles)
-  .reduce((acc: SlideImage[], [path]) => {
-    // Remove unused 'url' parameter
-    const id = getImageId(path);
-    if (id && path.includes("-medium.webp")) {
-      // Use the URLs directly from the glob import
-      const mediumUrl = imageFiles[
-        `/public/pictures/daza${id}-medium.webp`
-      ] as string;
-      const smallUrl = imageFiles[
-        `/public/pictures/daza${id}-small.webp`
-      ] as string;
-      const downloadUrl = imageFiles[
-        `/public/pictures/daza${id}.jpg`
-      ] as string;
-
-      acc.push({
-        id,
-        url: mediumUrl,
-        urlthumbnail: smallUrl,
-        urldownload: downloadUrl,
-        alt: `Slide ${id}`,
-      });
-    }
-    return acc;
-  }, [])
+const images: SlideImage[] = Array.from(
+  new Set(
+    imageFiles
+      .map((path) => getImageId(path))
+      .filter((id): id is string => id !== null),
+  ),
+)
+  .map((id) => ({
+    id,
+    url: findImageUrl(id, "-medium.webp"),
+    urlthumbnail: findImageUrl(id, "-small.webp"),
+    urldownload: findImageUrl(id, ".jpg"),
+    alt: `Slide ${id}`,
+  }))
   .sort((a, b) => a.id.localeCompare(b.id));
-
 const Slideshow: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [imageLoadError, setImageLoadError] = useState<string | null>(null);
