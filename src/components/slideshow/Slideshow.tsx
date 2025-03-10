@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { preloadImages } from "@utils/imagePreloader";
 import styles from "@styles/Slideshow.module.css";
 import type { SlideImage } from "@types";
 import { Controls } from "@components/slideshow/Controls";
