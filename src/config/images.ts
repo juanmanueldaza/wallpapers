@@ -3,7 +3,7 @@ export const imageConfig = {
     baseUrl: "/pictures", // Both point to public/pictures
   },
   production: {
-    baseUrl: "/wallpapers/pictures",
+    baseUrl: "/pictures",
   },
 };
 
