@@ -5,7 +5,6 @@ import type { SlideImage } from "@types";
 import { Controls } from "@components/slideshow/Controls";
 import { NavBar } from "@components/common/NavBar";
 import { Loading } from "@components/slideshow/Loading";
-import { getImagePath } from "@config/images";
 
 // Use Vite's glob import to get all images
 const imageFiles = import.meta.glob("/public/pictures/*.{jpg,webp}", {
@@ -21,7 +20,8 @@ const getImageId = (filename: string) => {
 
 // Create images array from glob results
 const images: SlideImage[] = Object.entries(imageFiles)
-  .reduce((acc: SlideImage[], [path, url]) => {
+  .reduce((acc: SlideImage[], [path]) => {
+    // Remove unused 'url' parameter
     const id = getImageId(path);
     if (id && path.includes("-medium.webp")) {
       // Use the URLs directly from the glob import
