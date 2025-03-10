@@ -5,6 +5,7 @@ import type { SlideImage } from "@types";
 import { Controls } from "@components/slideshow/Controls";
 import { NavBar } from "@components/common/NavBar";
 import { Loading } from "@components/slideshow/Loading";
+import { getImagePath } from "@config/images";
 
 // Use Vite's glob import to get all images
 const imageFiles = import.meta.glob("/public/pictures/*.{jpg,webp}", {
@@ -18,24 +19,27 @@ const getImageId = (filename: string) => {
   return match ? match[1] : null;
 };
 
-// Function to get correct path for images
-const getImagePath = (filename: string) => {
-  // In development, use the public path
-  // In production, use the base URL path
-  const basePath = import.meta.env.DEV ? "/pictures" : "/wallpapers/pictures";
-  return `${basePath}/${filename}`;
-};
-
 // Create images array from glob results
 const images: SlideImage[] = Object.entries(imageFiles)
   .reduce((acc: SlideImage[], [path, url]) => {
     const id = getImageId(path);
     if (id && path.includes("-medium.webp")) {
+      // Use the URLs directly from the glob import
+      const mediumUrl = imageFiles[
+        `/public/pictures/daza${id}-medium.webp`
+      ] as string;
+      const smallUrl = imageFiles[
+        `/public/pictures/daza${id}-small.webp`
+      ] as string;
+      const downloadUrl = imageFiles[
+        `/public/pictures/daza${id}.jpg`
+      ] as string;
+
       acc.push({
         id,
-        url: getImagePath(`daza${id}-medium.webp`),
-        urlthumbnail: getImagePath(`daza${id}-small.webp`),
-        urldownload: getImagePath(`daza${id}.jpg`),
+        url: mediumUrl,
+        urlthumbnail: smallUrl,
+        urldownload: downloadUrl,
         alt: `Slide ${id}`,
       });
     }
