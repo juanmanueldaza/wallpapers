@@ -15,4 +15,12 @@ export default defineConfig({
       "@config": path.resolve(__dirname, "./src/config"),
     },
   },
+  build: {
+    assetsDir: "assets",
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
 });

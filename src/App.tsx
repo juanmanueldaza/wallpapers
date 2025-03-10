@@ -1,11 +1,14 @@
 import { lazy, Suspense } from "react";
 const Slideshow = lazy(() => import("./components/slideshow/Slideshow"));
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 const App = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Slideshow />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Slideshow />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 

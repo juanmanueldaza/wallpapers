@@ -6,24 +6,26 @@ import { Controls } from "@components/slideshow/Controls";
 import { NavBar } from "@components/common/NavBar";
 import { Loading } from "@components/slideshow/Loading";
 
-// Use Vite's glob import to get all images
+// Use Vite's import.meta.env to handle environment-specific paths
+const BASE_URL = import.meta.env.BASE_URL || "/";
+
+// Modify the image path construction
 const imageFiles = Object.values(
   import.meta.glob("/public/pictures/*.{jpg,webp}", {
     eager: true,
     as: "url",
   }),
-);
+).map((path) => (path.startsWith("/") ? path : `${BASE_URL}${path}`));
+
+// Helper function to construct correct image URLs
+const getImageUrl = (filename: string): string => {
+  return `${BASE_URL}pictures/${filename}`;
+};
 
 // Function to extract ID from filename
 const getImageId = (filename: string) => {
   const match = filename.match(/daza(\d+)/);
   return match ? match[1] : null;
-};
-
-// Function to find URL by pattern
-const findImageUrl = (id: string, pattern: string): string => {
-  const filename = `daza${id}${pattern}`;
-  return imageFiles.find((url) => url.includes(filename)) || "";
 };
 
 // Create images array from glob results
@@ -36,19 +38,45 @@ const images: SlideImage[] = Array.from(
 )
   .map((id) => ({
     id,
-    url: findImageUrl(id, "-medium.webp"),
-    urlthumbnail: findImageUrl(id, "-small.webp"),
-    urldownload: findImageUrl(id, ".jpg"),
+    url: getImageUrl(`daza${id}-medium.webp`),
+    urlthumbnail: getImageUrl(`daza${id}-small.webp`),
+    urldownload: getImageUrl(`daza${id}.jpg`),
     alt: `Slide ${id}`,
   }))
   .sort((a, b) => a.id.localeCompare(b.id));
+
 const Slideshow: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [imageLoadError, setImageLoadError] = useState<string | null>(null);
+  const [loadingErrors, setLoadingErrors] = useState<Record<string, string>>(
+    {},
+  );
   const [selectedImage, setSelectedImage] = useState<SlideImage | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
+
+  const handleImageError = (
+    id: string,
+    imageType: "thumbnail" | "full" | "download",
+  ) => {
+    console.error(`Failed to load ${imageType} image:`, {
+      id,
+      url: images.find((img) => img.id === id)?.[
+        imageType === "thumbnail"
+          ? "urlthumbnail"
+          : imageType === "full"
+            ? "url"
+            : "urldownload"
+      ],
+      baseUrl: BASE_URL,
+      env: import.meta.env.MODE,
+    });
+
+    setLoadingErrors((prev) => ({
+      ...prev,
+      [`${id}-${imageType}`]: `Failed to load ${imageType} image ${id}`,
+    }));
+  };
 
   const getCurrentImageIndex = useCallback(() => {
     if (!selectedImage) return -1;
@@ -72,13 +100,52 @@ const Slideshow: React.FC = () => {
     [getCurrentImageIndex],
   );
 
+  // Debug logging during initialization
   useEffect(() => {
-    const allImageUrls = images.map((img) => img.urlthumbnail);
-    preloadImages(allImageUrls)
-      .then(() => setIsLoading(false))
-      .catch((error) => console.error("Error preloading images:", error));
+    console.log("Environment:", import.meta.env.MODE);
+    console.log("Base URL:", BASE_URL);
+    console.log("Image files found:", imageFiles);
   }, []);
 
+  // Preload images
+  useEffect(() => {
+    const preloadImageWithRetry = async (
+      url: string,
+      retries = 3,
+    ): Promise<void> => {
+      try {
+        await new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = url;
+        });
+      } catch (error) {
+        if (retries > 0) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          return preloadImageWithRetry(url, retries - 1);
+        }
+        throw error;
+      }
+    };
+
+    const loadImages = async () => {
+      setIsLoading(true);
+      try {
+        await Promise.all(
+          images.map((img) => preloadImageWithRetry(img.urlthumbnail)),
+        );
+      } catch (error) {
+        console.error("Image preloading failed:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadImages();
+  }, []);
+
+  // Handle fullscreen changes
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -93,6 +160,7 @@ const Slideshow: React.FC = () => {
     };
   }, []);
 
+  // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isFullscreen) return;
@@ -138,10 +206,6 @@ const Slideshow: React.FC = () => {
     }
 
     touchStartX.current = null;
-  };
-
-  const handleImageError = (id: string) => {
-    setImageLoadError(`Failed to load image ${id}`);
   };
 
   const handleDownload = () => {
@@ -194,7 +258,7 @@ const Slideshow: React.FC = () => {
               src={selectedImage.url}
               alt={selectedImage.alt}
               className={styles.fullscreenImage}
-              onError={() => handleImageError(selectedImage.id)}
+              onError={() => handleImageError(selectedImage.id, "full")}
             />
           </div>
         ) : (
@@ -209,7 +273,8 @@ const Slideshow: React.FC = () => {
                   src={image.urlthumbnail}
                   alt={image.alt}
                   className={styles.thumbnail}
-                  onError={() => handleImageError(image.id)}
+                  onError={() => handleImageError(image.id, "thumbnail")}
+                  loading="lazy"
                 />
               </div>
             ))}
@@ -217,7 +282,13 @@ const Slideshow: React.FC = () => {
         )}
       </div>
 
-      {imageLoadError && <div className={styles.error}>{imageLoadError}</div>}
+      {Object.keys(loadingErrors).length > 0 && (
+        <div className={styles.error}>
+          {Object.values(loadingErrors).map((error, index) => (
+            <div key={index}>{error}</div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

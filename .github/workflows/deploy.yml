@@ -29,6 +29,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y imagemagick
 
+      # Ensure pictures directory exists in dist
+      - name: Create pictures directory
+        run: mkdir -p dist/pictures
+
       # Process images BEFORE build
       - name: Run Image Processing Script
         run: |
@@ -37,6 +41,10 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # Verify build output
+      - name: List build output
+        run: ls -la dist/pictures
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
