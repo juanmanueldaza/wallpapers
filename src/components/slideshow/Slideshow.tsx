@@ -21,9 +21,9 @@ const getImageUrl = (filename: string): string => {
   return `${BASE_URL}pictures/${filename}`;
 };
 
-// Function to extract ID from filename
 const getImageId = (filename: string) => {
-  const match = filename.match(/daza(\d+)/);
+  // This regex looks for .jpg files only and extracts the number
+  const match = filename.match(/daza(\d+)\.jpg$/);
   return match ? match[1] : null;
 };
 
@@ -31,18 +31,38 @@ const getImageId = (filename: string) => {
 const images: SlideImage[] = Array.from(
   new Set(
     imageFiles
+      .filter((path) => path.endsWith(".jpg")) // Only look at original JPG files
       .map((path) => getImageId(path))
       .filter((id): id is string => id !== null),
   ),
 )
-  .map((id) => ({
-    id,
-    url: getImageUrl(`daza${id}-medium.webp`),
-    urlthumbnail: getImageUrl(`daza${id}-small.webp`),
-    urldownload: getImageUrl(`daza${id}.jpg`),
-    alt: `Slide ${id}`,
-  }))
+  .map((id) => {
+    const baseFilename = `daza${id}`;
+    return {
+      id,
+      url: getImageUrl(`${baseFilename}-medium.webp`),
+      urlthumbnail: getImageUrl(`${baseFilename}-small.webp`),
+      urldownload: getImageUrl(`${baseFilename}.jpg`),
+      alt: `Slide ${id}`,
+    };
+  })
   .sort((a, b) => a.id.localeCompare(b.id));
+
+// Add more debug logging to help diagnose issues
+useEffect(() => {
+  console.log("Environment:", import.meta.env.MODE);
+  console.log("Base URL:", BASE_URL);
+  console.log("Image files found:", imageFiles);
+  console.log(
+    "Processed images:",
+    images.map((img) => ({
+      id: img.id,
+      thumbnail: img.urlthumbnail,
+      medium: img.url,
+      original: img.urldownload,
+    })),
+  );
+}, []);
 
 const Slideshow: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);

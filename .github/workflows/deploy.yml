@@ -29,22 +29,32 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y imagemagick
 
-      # Ensure pictures directory exists in dist
-      - name: Create pictures directory
-        run: mkdir -p dist/pictures
+      # First, copy images to dist directory
+      - name: Create pictures directory and copy images
+        run: |
+          mkdir -p dist/pictures
+          cp public/pictures/*.jpg dist/pictures/
 
-      # Process images BEFORE build
+      # Then process images
       - name: Run Image Processing Script
         run: |
           chmod +x ./picture_processing.sh
           NODE_ENV=production ./picture_processing.sh
 
+      # List files to verify
+      - name: List processed images
+        run: |
+          echo "Contents of dist/pictures:"
+          ls -la dist/pictures
+
       - name: Build
         run: npm run build
 
-      # Verify build output
+      # Verify final build output
       - name: List build output
-        run: ls -la dist/pictures
+        run: |
+          echo "Final contents of dist/pictures:"
+          ls -la dist/pictures
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
