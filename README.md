@@ -19,11 +19,6 @@ This project highlights the intersection of **traditional photographic technique
 
 - **Digital Workflow**:
   - Images are processed using **open-source tools** to enhance quality while maintaining the analog feel.
-  
-- **Repository Structure**:
-  - 📂 `photos/`: Contains the digitalized images.
-  - 📂 `scripts/`: Includes scripts for batch processing and metadata generation.
-  - 📂 `docs/`: Documentation on the photography and development process.
 
 ---
 
