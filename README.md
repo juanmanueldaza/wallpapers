@@ -11,12 +11,15 @@ This project highlights the intersection of **traditional photographic technique
 ---
 
 ## ⚙️ Technical Details
+
 - **Photography Process**:
   - All images are shot on **35mm film**.
   - Developed manually using traditional darkroom techniques.
   - Scanned and digitalized for online use.
+
 - **Digital Workflow**:
   - Images are processed using **open-source tools** to enhance quality while maintaining the analog feel.
+  
 - **Repository Structure**:
   - 📂 `photos/`: Contains the digitalized images.
   - 📂 `scripts/`: Includes scripts for batch processing and metadata generation.
