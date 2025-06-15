@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analog Wallpapers - Juan Manuel Daza</title>
+  <meta name="description" content="A collection of analog photographs shot on 35mm film, developed and digitalized by Juan Manuel Daza. Free high-resolution wallpapers for your devices.">
+  <meta name="author" content="Juan Manuel Daza">
+  <meta name="keywords" content="wallpapers, analog photography, 35mm film, photography, Juan Manuel Daza, film photography">
+  <link rel="icon" href="public/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;700&display=swap');
+    
+    :root {
+      --bg: #f6f8fa;
+      --fg: #23232e;
+      --window-bg: #fff;
+      --window-border: #e1e4e8;
+      --body-color: #23232e;
+      --heading: #23232e;
+      --link: #0366d6;
+      --link-hover: #0056b3;
+      --button-bg: #f6f8fa;
+      --button-fg: #23232e;
+      --button-border: #e1e4e8;
+      --button-hover-bg: #e1e4e8;
+      --button-hover-fg: #23232e;
+      --overlay-bg: rgba(0, 0, 0, 0.9);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #2c2c32;
+        --fg: #e6e6e6;
+        --window-bg: #23232e;
+        --window-border: #222226;
+        --body-color: #e6e6e6;
+        --heading: #fff;
+        --link: #8ab4f8;
+        --link-hover: #fff;
+        --button-bg: #23232e;
+        --button-fg: #e6e6e6;
+        --button-border: #444c56;
+        --button-hover-bg: #444c56;
+        --button-hover-fg: #fff;
+        --overlay-bg: rgba(0, 0, 0, 0.95);
+      }
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: var(--bg);
+      color: var(--body-color);
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .header {
+      background: var(--window-bg);
+      border-bottom: 1.5px solid var(--window-border);
+      padding: 24px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header h1 {
+      margin: 0 0 8px 0;
+      color: var(--heading);
+      font-size: 1.5em;
+      font-weight: 700;
+    }
+    
+    .header p {
+      margin: 0 0 16px 0;
+      color: var(--body-color);
+      opacity: 0.8;
+      font-size: 0.9em;
+    }
+    
+    .header-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 8px 16px;
+      background: var(--button-bg);
+      color: var(--button-fg);
+      border: 1px solid var(--button-border);
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9em;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    
+    .btn:hover, .btn.active {
+      background: var(--button-hover-bg);
+      color: var(--button-hover-fg);
+    }
+    
+    .gallery-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+    
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+    
+    .gallery-item {
+      background: var(--window-bg);
+      border: 1.5px solid var(--window-border);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    
+    .gallery-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .gallery-item-info {
+      padding: 16px;
+    }
+    
+    .gallery-item-title {
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: var(--heading);
+    }
+    
+    .gallery-item-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    
+    .btn-small {
+      padding: 4px 8px;
+      font-size: 0.8em;
+    }
+    
+    .slideshow-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--overlay-bg);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .slideshow-container {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .slideshow-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    
+    .slideshow-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--button-bg);
+      color: var(--button-fg);
+      border: 1px solid var(--button-border);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2em;
+      transition: all 0.2s;
+    }
+    
+    .slideshow-nav:hover {
+      background: var(--button-hover-bg);
+      color: var(--button-hover-fg);
+    }
+    
+    .slideshow-nav.prev {
+      left: -60px;
+    }
+    
+    .slideshow-nav.next {
+      right: -60px;
+    }
+    
+    .slideshow-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--button-bg);
+      color: var(--button-fg);
+      border: 1px solid var(--button-border);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: all 0.2s;
+    }
+    
+    .slideshow-close:hover {
+      background: var(--button-hover-bg);
+      color: var(--button-hover-fg);
+    }
+    
+    .slideshow-info {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--window-bg);
+      color: var(--body-color);
+      padding: 12px 20px;
+      border-radius: 20px;
+      border: 1px solid var(--window-border);
+      font-size: 0.9em;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    
+    .keyboard-hint {
+      font-size: 0.8em;
+      color: var(--body-color);
+      opacity: 0.6;
+      margin-top: 16px;
+      text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+      .header {
+        padding: 16px 20px;
+      }
+      
+      .gallery-container {
+        padding: 20px;
+      }
+      
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 16px;
+      }
+      
+      .slideshow-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1em;
+      }
+      
+      .slideshow-nav.prev {
+        left: 10px;
+      }
+      
+      .slideshow-nav.next {
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Analog Wallpapers</h1>
+    <p>A collection of analog photographs shot on 35mm film, developed and digitalized by Juan Manuel Daza</p>
+    <div class="header-controls">
+      <button class="btn" onclick="toggleSlideshow()">
+        <i class="fas fa-play"></i>
+        Start Slideshow
+      </button>
+      <a href="https://daza.ar" class="btn" target="_blank">
+        <i class="fas fa-globe"></i>
+        Visit daza.ar
+      </a>
+      <a href="https://github.com/juanmanueldaza" class="btn" target="_blank">
+        <i class="fab fa-github"></i>
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <div class="gallery-container">
+    <div class="gallery-grid" id="gallery"></div>
+    <div class="keyboard-hint">
+      💡 Click any image to view in fullscreen • Use arrow keys to navigate • Press ESC to close
+    </div>
+  </div>
+
+  <div class="slideshow-overlay" id="slideshow">
+    <div class="slideshow-container">
+      <img class="slideshow-img" id="slideshow-img" alt="Wallpaper">
+      <button class="slideshow-nav prev" onclick="previousImage()">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="slideshow-nav next" onclick="nextImage()">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <button class="slideshow-close" onclick="closeSlideshow()">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="slideshow-info">
+        <span id="slideshow-counter">1 / 1</span>
+        <button class="btn btn-small" onclick="downloadCurrent()">
+          <i class="fas fa-download"></i>
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const wallpapers = [
+      'daza007.jpg', 'daza009.jpg', 'daza024.jpg', 'daza036.jpg', 'daza047.jpg',
+      'daza051.jpg', 'daza052.jpg', 'daza054.jpg', 'daza060.jpg', 'daza061.jpg',
+      'daza063.jpg', 'daza067.jpg', 'daza072.jpg', 'daza088.jpg', 'daza128.jpg',
+      'daza131.jpg', 'daza136.jpg', 'daza140.jpg', 'daza143.jpg', 'daza474.jpg', 'daza478.jpg'
+    ];
+
+    let currentImageIndex = 0;
+    let isSlideshow = false;
+    let slideshowInterval;
+
+    function initGallery() {
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = '';
+      
+      wallpapers.forEach((filename, index) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = `
+          <img src="public/pictures/${filename}" alt="${filename}" loading="lazy">
+          <div class="gallery-item-info">
+            <h3 class="gallery-item-title">${filename.replace('.jpg', '').toUpperCase()}</h3>
+            <div class="gallery-item-actions">
+              <button class="btn btn-small" onclick="viewImage(${index})">
+                <i class="fas fa-eye"></i>
+                View
+              </button>
+              <button class="btn btn-small" onclick="downloadImage('${filename}')">
+                <i class="fas fa-download"></i>
+                Download
+              </button>
+            </div>
+          </div>
+        `;
+        gallery.appendChild(item);
+      });
+    }
+
+    function viewImage(index) {
+      currentImageIndex = index;
+      showSlideshow();
+    }
+
+    function showSlideshow() {
+      const slideshow = document.getElementById('slideshow');
+      const img = document.getElementById('slideshow-img');
+      const counter = document.getElementById('slideshow-counter');
+      
+      img.src = `public/pictures/${wallpapers[currentImageIndex]}`;
+      img.alt = wallpapers[currentImageIndex];
+      counter.textContent = `${currentImageIndex + 1} / ${wallpapers.length}`;
+      
+      slideshow.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSlideshow() {
+      const slideshow = document.getElementById('slideshow');
+      slideshow.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      
+      if (slideshowInterval) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
+        isSlideshow = false;
+      }
+    }
+
+    function nextImage() {
+      currentImageIndex = (currentImageIndex + 1) % wallpapers.length;
+      updateSlideshowImage();
+    }
+
+    function previousImage() {
+      currentImageIndex = (currentImageIndex - 1 + wallpapers.length) % wallpapers.length;
+      updateSlideshowImage();
+    }
+
+    function updateSlideshowImage() {
+      const img = document.getElementById('slideshow-img');
+      const counter = document.getElementById('slideshow-counter');
+      
+      img.src = `public/pictures/${wallpapers[currentImageIndex]}`;
+      img.alt = wallpapers[currentImageIndex];
+      counter.textContent = `${currentImageIndex + 1} / ${wallpapers.length}`;
+    }
+
+    function toggleSlideshow() {
+      if (isSlideshow) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
+        isSlideshow = false;
+        closeSlideshow();
+      } else {
+        currentImageIndex = 0;
+        showSlideshow();
+        isSlideshow = true;
+        slideshowInterval = setInterval(nextImage, 4000);
+      }
+    }
+
+    function downloadImage(filename) {
+      const link = document.createElement('a');
+      link.href = `public/pictures/${filename}`;
+      link.download = filename;
+      link.click();
+    }
+
+    function downloadCurrent() {
+      downloadImage(wallpapers[currentImageIndex]);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      const slideshow = document.getElementById('slideshow');
+      if (slideshow.style.display === 'flex') {
+        switch(e.key) {
+          case 'Escape':
+            closeSlideshow();
+            break;
+          case 'ArrowLeft':
+            previousImage();
+            break;
+          case 'ArrowRight':
+            nextImage();
+            break;
+          case ' ':
+            e.preventDefault();
+            toggleSlideshow();
+            break;
+        }
+      }
+    });
+
+    // Click outside to close
+    document.getElementById('slideshow').addEventListener('click', (e) => {
+      if (e.target.id === 'slideshow') {
+        closeSlideshow();
+      }
+    });
+
+    // Initialize gallery when page loads
+    document.addEventListener('DOMContentLoaded', initGallery);
+  </script>
+</body>
+</html>
