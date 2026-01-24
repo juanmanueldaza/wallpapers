@@ -2,8 +2,22 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <!-- Google Analytics 4 with Consent Mode v2 (GDPR Compliant) -->
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'analytics_storage': 'denied'
+            });
+            gtag('js', new Date());
+            gtag('config', 'G-PV6HF4TEQ7');
+        </script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PV6HF4TEQ7"></script>
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Wallpapers slideshow application" />
         <title>Analog Wallpapers by Juan Manuel Daza</title>
         <meta name="title" content="Analog Wallpapers by Juan Manuel Daza" />
         <meta
@@ -11,12 +25,17 @@
             content="A collection of analog photographs shot on 35mm film, developed and digitalized by Juan Manuel Daza. Free high-resolution wallpapers for your devices."
         />
 
+        <link rel="canonical" href="https://wallpapers.daza.ar/" />
+        <meta name="author" content="Juan Manuel Daza" />
+        <meta name="theme-color" content="#000000" />
+        <meta
+            name="keywords"
+            content="wallpapers, analog photography, 35mm film, photography, Juan Manuel Daza, film photography, free wallpapers"
+        />
+
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
-        <meta
-            property="og:url"
-            content="https://wallpapers.ultravietnamita.com.ar/"
-        />
+        <meta property="og:url" content="https://wallpapers.daza.ar/" />
         <meta
             property="og:title"
             content="Analog Wallpapers by Juan Manuel Daza"
@@ -27,15 +46,12 @@
         />
         <meta
             property="og:image"
-            content="https://wallpapers.ultravietnamita.com.ar/pictures/daza051.jpg"
+            content="https://wallpapers.daza.ar/pictures/daza051.jpg"
         />
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image" />
-        <meta
-            property="twitter:url"
-            content="https://wallpapers.ultravietnamita.com.ar/"
-        />
+        <meta property="twitter:url" content="https://wallpapers.daza.ar/" />
         <meta
             property="twitter:title"
             content="Analog Wallpapers by Juan Manuel Daza"
@@ -46,19 +62,191 @@
         />
         <meta
             property="twitter:image"
-            content="https://wallpapers.ultravietnamita.com.ar/pictures/daza051.jpg"
+            content="https://wallpapers.daza.ar/pictures/daza051.jpg"
         />
 
-        <!-- Additional Meta Tags -->
-        <meta name="author" content="Juan Manuel Daza" />
-        <meta
-            name="keywords"
-            content="wallpapers, analog photography, 35mm film, photography, Juan Manuel Daza, film photography"
-        />
-        <meta name="theme-color" content="#000000" />
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "ImageGallery",
+            "name": "Analog Wallpapers by Juan Manuel Daza",
+            "description": "A collection of analog photographs shot on 35mm film, developed and digitalized by Juan Manuel Daza. Free high-resolution wallpapers for your devices.",
+            "url": "https://wallpapers.daza.ar/",
+            "author": {
+                "@type": "Person",
+                "name": "Juan Manuel Daza",
+                "url": "https://daza.ar"
+            },
+            "creator": {
+                "@type": "Person",
+                "name": "Juan Manuel Daza"
+            },
+            "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+            "keywords": "wallpapers, analog photography, 35mm film, photography, free wallpapers"
+        }
+        </script>
+
+        <!-- Cookie Banner Styles -->
+        <style>
+            .cookie-banner {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.95);
+                border-top: 1px solid #333;
+                padding: 1rem;
+                z-index: 10000;
+                font-family: system-ui, -apple-system, sans-serif;
+            }
+            .cookie-banner[hidden] { display: none; }
+            .cookie-content {
+                max-width: 800px;
+                margin: 0 auto;
+                text-align: center;
+            }
+            .cookie-content h3 {
+                font-size: 1rem;
+                margin: 0 0 0.5rem 0;
+                color: #fff;
+            }
+            .cookie-content p {
+                font-size: 0.875rem;
+                margin: 0 0 1rem 0;
+                color: #ccc;
+            }
+            .cookie-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+            }
+            .cookie-btn {
+                font-size: 0.875rem;
+                padding: 0.5rem 1.5rem;
+                border: 1px solid;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .cookie-btn-reject {
+                background: transparent;
+                border-color: #666;
+                color: #ccc;
+            }
+            .cookie-btn-reject:hover {
+                background: #333;
+                border-color: #888;
+            }
+            .cookie-btn-accept {
+                background: #fff;
+                border-color: #fff;
+                color: #000;
+            }
+            .cookie-btn-accept:hover {
+                background: #ddd;
+                border-color: #ddd;
+            }
+            .cookie-settings-btn {
+                position: fixed;
+                bottom: 1rem;
+                left: 1rem;
+                background: rgba(0, 0, 0, 0.7);
+                border: 1px solid #333;
+                color: #888;
+                font-size: 0.75rem;
+                padding: 0.25rem 0.5rem;
+                border-radius: 4px;
+                cursor: pointer;
+                z-index: 9999;
+                transition: all 0.2s;
+            }
+            .cookie-settings-btn:hover {
+                color: #fff;
+                border-color: #666;
+            }
+        </style>
     </head>
     <body>
         <div id="root"></div>
         <script type="module" src="/src/main.tsx"></script>
+
+        <!-- Cookie Consent Banner -->
+        <div id="cookie-banner" class="cookie-banner" role="dialog" aria-labelledby="cookie-title" hidden>
+            <div class="cookie-content">
+                <h3 id="cookie-title">Cookie Settings</h3>
+                <p>We use cookies to analyze site traffic. You can accept or reject analytics cookies.</p>
+                <div class="cookie-buttons">
+                    <button type="button" id="cookie-reject" class="cookie-btn cookie-btn-reject">Reject All</button>
+                    <button type="button" id="cookie-accept" class="cookie-btn cookie-btn-accept">Accept All</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cookie Settings Button -->
+        <button type="button" id="cookie-settings" class="cookie-settings-btn">Cookie Settings</button>
+
+        <!-- Consent Manager Script -->
+        <script>
+            (function() {
+                const STORAGE_KEY = 'cookie_consent';
+                
+                function getConsent() {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored === null) return null;
+                    return stored === 'granted';
+                }
+                
+                function setConsent(granted) {
+                    localStorage.setItem(STORAGE_KEY, granted ? 'granted' : 'denied');
+                    applyConsent(granted);
+                    hideBanner();
+                }
+                
+                function applyConsent(granted) {
+                    const state = granted ? 'granted' : 'denied';
+                    if (typeof gtag !== 'undefined') {
+                        gtag('consent', 'update', {
+                            'ad_storage': state,
+                            'ad_user_data': state,
+                            'ad_personalization': state,
+                            'analytics_storage': state
+                        });
+                    }
+                }
+                
+                function showBanner() {
+                    const banner = document.getElementById('cookie-banner');
+                    if (banner) banner.hidden = false;
+                }
+                
+                function hideBanner() {
+                    const banner = document.getElementById('cookie-banner');
+                    if (banner) banner.hidden = true;
+                }
+                
+                // Initialize
+                const consent = getConsent();
+                if (consent === null) {
+                    showBanner();
+                } else {
+                    applyConsent(consent);
+                }
+                
+                // Bind events
+                document.getElementById('cookie-accept')?.addEventListener('click', function() {
+                    setConsent(true);
+                });
+                
+                document.getElementById('cookie-reject')?.addEventListener('click', function() {
+                    setConsent(false);
+                });
+                
+                document.getElementById('cookie-settings')?.addEventListener('click', function() {
+                    showBanner();
+                });
+            })();
+        </script>
     </body>
 </html>
