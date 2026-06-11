@@ -376,12 +376,12 @@
 
     showBanner: function() {
       const banner = document.getElementById('cookie-banner');
-      if (banner) banner.hidden = false;
+      if (banner) { banner.style.display = "flex"; banner.removeAttribute("hidden"); }
     },
 
     hideBanner: function() {
       const banner = document.getElementById('cookie-banner');
-      if (banner) banner.hidden = true;
+      if (banner) { banner.style.display = "none"; }
     },
 
     bindEvents: function() {
